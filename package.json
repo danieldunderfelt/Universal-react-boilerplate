@@ -12,8 +12,7 @@
     "lint": "eslint -c .eslintrc src api",
     "start-dev": "node ./node_modules/better-npm-run start-dev",
     "watch-client": "node ./node_modules/better-npm-run watch-client",
-    "dev": "concurrent --kill-others \"npm run watch-client\" \"npm run start-dev\"",
-    "test": "karma start"
+    "dev": "concurrent --kill-others \"npm run watch-client\" \"npm run start-dev\""
   },
   "betterScripts": {
     "start-prod": {
