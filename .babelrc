@@ -1,0 +1,8 @@
+{
+	"stage": 0,
+	"optional": "runtime",
+	"blacklist": [],
+	"plugins": [
+		"typecheck"
+	]
+}
