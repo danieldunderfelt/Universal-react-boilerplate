@@ -6,7 +6,7 @@ import compression from 'compression'
 import { createMemoryHistory } from 'history'
 import path from 'path'
 import config from './config'
-import Html from './helpers/Html'
+import Html from './containers/Html'
 import PrettyError from 'pretty-error'
 import http from 'http'
 import routes from './routes'
@@ -28,13 +28,12 @@ app.use((req, res) => {
 		webpackIsomorphicTools.refresh()
 	}
 
-
 	const history = createMemoryHistory()
 	const location = history.createLocation(req.path, req.query)
 
 	if (__DISABLE_SSR__) {
 		res.send('<!doctype html>\n' +
-			ReactDOM.renderToString(<Html assets={webpackIsomorphicTools.assets()} component={null} resolverData={{}}/>))
+			ReactDOM.renderToString(<Html assets={webpackIsomorphicTools.assets()} component={null} />))
 	} else {
 		match({ routes, location }, (error, redirectLocation, renderProps) => {
 			if (redirectLocation)
@@ -44,15 +43,10 @@ app.use((req, res) => {
 			else if (renderProps == null)
 				res.status(404).send('Not found')
 			else
-				res.status(200).send(createResponse(<RoutingContext {...renderProps} />))
+				res.status(200).send('<!doctype html>\n' + ReactDOM.renderToString(<Html assets={webpackIsomorphicTools.assets()} component={ <RoutingContext {...renderProps} /> } />))
 		})
 	}
 })
-
-function createResponse(Component) {
-	return '<!doctype html>\n' + ReactDOM.renderToString(<Html assets={webpackIsomorphicTools.assets()} component={ Component } />)
-}
-
 
 if (config.port) {
 	server.listen(config.port, (err) => {
