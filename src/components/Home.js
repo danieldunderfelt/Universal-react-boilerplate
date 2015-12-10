@@ -1,4 +1,5 @@
 import React from 'react'
+import style from '../style/home.css'
 
 class Home extends React.Component {
 
@@ -6,7 +7,9 @@ class Home extends React.Component {
 
         return (
             <div>
-                Home
+							<h1 className={style.heading}>
+								Home yay
+							</h1>
             </div>
         )
     }
