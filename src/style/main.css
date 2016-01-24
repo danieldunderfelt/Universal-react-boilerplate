@@ -1,3 +1,7 @@
+/**
+*	This file is for GLOBAL styles and normalization. Co-locate your component styles with your components in the 'components' folder.
+*/
+
 @import 'normalize.css';
 
 html {

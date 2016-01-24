@@ -1,5 +1,5 @@
 import React from 'react'
-import style from '../style/home.css'
+import style from './home.css'
 
 class Home extends React.Component {
 
@@ -7,9 +7,9 @@ class Home extends React.Component {
 
         return (
             <div>
-							<h1 className={style.heading}>
-								Home yay
-							</h1>
+                <h1>
+                    Home yay
+                </h1>
             </div>
         )
     }
