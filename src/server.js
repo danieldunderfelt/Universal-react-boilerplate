@@ -3,14 +3,13 @@ import React from 'react'
 import ReactDOM from 'react-dom/server'
 import favicon from 'serve-favicon'
 import compression from 'compression'
-import { createMemoryHistory } from 'history'
 import path from 'path'
 import config from './config'
 import Html from './containers/Html'
 import PrettyError from 'pretty-error'
 import http from 'http'
 import routes from './routes'
-import { match, RoutingContext } from 'react-router'
+import { match, RouterContext, memoryHistory } from 'react-router'
 
 const pretty = new PrettyError()
 const app = new Express()
@@ -28,14 +27,11 @@ app.use((req, res) => {
 		webpackIsomorphicTools.refresh()
 	}
 
-	const history = createMemoryHistory()
-	const location = history.createLocation(req.path, req.query)
-
 	if (__DISABLE_SSR__) {
 		res.send('<!doctype html>\n' +
 			ReactDOM.renderToString(<Html assets={webpackIsomorphicTools.assets()} component={null} />))
 	} else {
-		match({ routes, location }, (error, redirectLocation, renderProps) => {
+		match({ routes, location: req.url }, (error, redirectLocation, renderProps) => {
 			if (redirectLocation)
 				res.status(301).redirect(redirectLocation.pathname + redirectLocation.search)
 			else if (error)
@@ -43,7 +39,7 @@ app.use((req, res) => {
 			else if (renderProps == null)
 				res.status(404).send('Not found')
 			else
-				res.status(200).send('<!doctype html>\n' + ReactDOM.renderToString(<Html assets={webpackIsomorphicTools.assets()} component={ <RoutingContext {...renderProps} /> } />))
+				res.status(200).send('<!doctype html>\n' + ReactDOM.renderToString(<Html assets={webpackIsomorphicTools.assets()} component={ <RouterContext {...renderProps} /> } />))
 		})
 	}
 })

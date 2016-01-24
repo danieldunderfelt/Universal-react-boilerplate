@@ -1,8 +1,9 @@
 {
-	"stage": 0,
-	"optional": "runtime",
-	"blacklist": [],
-	"plugins": [
-		"typecheck"
-	]
+	"presets": ["react", "es2015", "stage-0"],
+	"plugins": ["transform-decorators-legacy"],
+	"env": {
+		"development": {
+			"presets": []
+		}
+	}
 }

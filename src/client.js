@@ -1,16 +1,12 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import Router from 'react-router'
+import { Router, browserHistory} from 'react-router'
 import routes from './routes'
-import { createHistory } from 'history'
 
 ReactDOM.render(
-    (<Router history={ createHistory() }>
-       { routes }
-    </Router>),
+    <Router history={ browserHistory } routes={ routes } />,
     document.getElementById('content')
 )
-
 
 if (process.env.NODE_ENV !== 'production') {
   window.React = React // enable debugger

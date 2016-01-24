@@ -10,32 +10,19 @@ var port = parseInt(process.env.PORT) + 1 || 3001;
 var WebpackIsomorphicToolsPlugin = require('webpack-isomorphic-tools/plugin');
 var webpackIsomorphicToolsPlugin = new WebpackIsomorphicToolsPlugin(require('./webpack-isomorphic-tools'));
 
-var babelrc = fs.readFileSync('./.babelrc');
-var babelLoaderQuery = {};
+var babelrc = fs.readFileSync(path.resolve(__dirname, '../.babelrc'));
+var babelConfig;
 
 try {
-    babelLoaderQuery = JSON.parse(babelrc);
+    babelConfig = JSON.parse(babelrc);
+    babelConfig.env.development.presets.push("react-hmre")
 } catch (err) {
     console.error('==>     ERROR: Error parsing your .babelrc.');
     console.error(err);
 }
 
-babelLoaderQuery.plugins = babelLoaderQuery.plugins || [];
-babelLoaderQuery.plugins.push('react-transform');
-babelLoaderQuery.extra = babelLoaderQuery.extra || {};
-babelLoaderQuery.extra['react-transform'] = {
-    transforms: [{
-        transform: 'react-transform-hmr',
-        imports: ['react'],
-        locals: ['module']
-    }, {
-        transform: 'react-transform-catch-errors',
-        imports: ['react', 'redbox-react']
-    }]
-};
-
 module.exports = {
-    devtool: 'eval-source-map',
+    devtool: "eval-cheap-module-source-map",
     context: path.resolve(__dirname, '..'),
     entry: {
         'main': [
@@ -51,7 +38,7 @@ module.exports = {
     },
     module: {
         loaders: [
-            {test: /\.js$/, exclude: /node_modules/, loaders: ['babel?' + JSON.stringify(babelLoaderQuery)]},
+            {test: /\.js$/, include: /src/, loader: 'babel', query: babelConfig },
             {test: /\.json$/, loader: 'json-loader'},
             {
                 test: /\.css$/,
