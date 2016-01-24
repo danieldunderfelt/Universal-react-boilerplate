@@ -1,5 +1,5 @@
 import React from 'react'
-import style from './home.css'
+import styles from './home.css'
 
 class Home extends React.Component {
 
