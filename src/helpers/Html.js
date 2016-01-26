@@ -20,7 +20,7 @@ class Html extends Component {
 		return (
 			<html lang="en-us">
 			<head>
-				<meta charset="utf-8"/>
+				<meta charSet="utf-8"/>
 
 				{/* styles (will be present only in production with webpack extract text plugin) */}
 				{Object.keys(assets.styles).map((style, key) =>
@@ -28,7 +28,7 @@ class Html extends Component {
 				)}
 			</head>
 			<body>
-			<div id="content" dangerouslySetInnerHTML={{__html: content}}></div>
+			<div id="root" dangerouslySetInnerHTML={{__html: content}}></div>
 			<script src={ assets.javascript.main }></script>
 			</body>
 			</html>

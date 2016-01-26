@@ -1,17 +1,16 @@
 import React from 'react'
-import '../style/main.css'
 
 class App extends React.Component {
 
-	render() {
+    render() {
 
-		return (
-			<div>
-				App
-				{this.props.children}
-			</div>
-		)
-	}
+        return (
+            <div>
+                App
+                {this.props.children}
+            </div>
+        )
+    }
 }
 
 export default App

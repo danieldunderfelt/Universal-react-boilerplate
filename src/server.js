@@ -1,3 +1,9 @@
+import es6Promise from 'es6-promise'
+es6Promise.polyfill()
+
+import 'isomorphic-fetch'
+import 'babel/polyfill'
+
 import Express from 'express'
 import React from 'react'
 import ReactDOM from 'react-dom/server'
@@ -5,11 +11,16 @@ import favicon from 'serve-favicon'
 import compression from 'compression'
 import path from 'path'
 import config from './config'
-import Html from './containers/Html'
+import Html from './helpers/Html'
+import Root from './containers/Root'
 import PrettyError from 'pretty-error'
 import http from 'http'
 import routes from './routes'
-import { match, RouterContext, memoryHistory } from 'react-router'
+import { match, RouterContext, createMemoryHistory } from 'react-router'
+import { Provider } from 'react-redux'
+import thunk from 'redux-thunk'
+import rootReducer from './redux/rootReducer'
+import configureStore from './redux/configureStore'
 
 const pretty = new PrettyError()
 const app = new Express()
@@ -38,11 +49,27 @@ app.use((req, res) => {
 				res.status(500).send(error.message)
 			else if (renderProps == null)
 				res.status(404).send('Not found')
-			else
-				res.status(200).send('<!doctype html>\n' + ReactDOM.renderToString(<Html assets={webpackIsomorphicTools.assets()} component={ <RouterContext {...renderProps} /> } />))
+			else {
+
+                const history = createMemoryHistory(req.url)
+                const store = configureStore({ initialState: {}, history })
+
+				const component = (
+                    <Root store={store}>
+                        <RouterContext { ...renderProps }  />
+                    </Root>
+				)
+
+				const data = store.getState()
+				res.status(200).send(createResponse(component, data))
+			}
 		})
 	}
 })
+
+function createResponse(Component, data = {}) {
+	return '<!doctype html>\n' + ReactDOM.renderToString(<Html assets={webpackIsomorphicTools.assets()} data={data} component={ Component }/>)
+}
 
 if (config.port) {
 	server.listen(config.port, (err) => {
