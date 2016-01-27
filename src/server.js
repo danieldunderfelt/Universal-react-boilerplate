@@ -19,7 +19,7 @@ import routes from './routes'
 import { match, RouterContext, createMemoryHistory } from 'react-router'
 import { Provider } from 'react-redux'
 import thunk from 'redux-thunk'
-import rootReducer from './redux/rootReducer'
+import rootReducer from './redux/reducers'
 import configureStore from './redux/configureStore'
 
 const pretty = new PrettyError()

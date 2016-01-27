@@ -1,7 +1,7 @@
 import { applyMiddleware, compose, createStore } from 'redux'
 import { syncHistory } from 'react-router-redux'
 import thunk from 'redux-thunk'
-import rootReducer from './rootReducer'
+import rootReducer from './reducers'
 
 function withDevTools (middleware) {
 	const devTools = window.devToolsExtension
@@ -23,8 +23,8 @@ export default function configureStore ({ initialState = {}, history }) {
 	if (__DEVTOOLS__) routerMiddleware.listenForReplays(store, ({ router }) => router.location)
 
 	if (module.hot) {
-		module.hot.accept('./rootReducer', () => {
-			const nextRootReducer = require('./rootReducer')
+		module.hot.accept('./reducers', () => {
+			const nextRootReducer = require('./reducers')
 
 			store.replaceReducer(nextRootReducer)
 		})
