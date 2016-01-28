@@ -33,21 +33,34 @@ app.use((req, res) => {
 		webpackIsomorphicTools.refresh()
 	}
 
-	if (__DISABLE_SSR__) {
+	function hydrateOnClient() {
 		res.send('<!doctype html>\n' +
-			ReactDOM.renderToString(<Html assets={webpackIsomorphicTools.assets()} component={null} />))
-	} else {
-		match({ routes, location: req.url }, (error, redirectLocation, renderProps) => {
-			if (redirectLocation)
-				res.status(301).redirect(redirectLocation.pathname + redirectLocation.search)
-			else if (error)
-				res.status(500).send(error.message)
-			else if (renderProps == null)
-				res.status(404).send('Not found')
-			else
-				res.status(200).send('<!doctype html>\n' + ReactDOM.renderToString(<Html assets={webpackIsomorphicTools.assets()} component={ <RouterContext {...renderProps} /> } />))
-		})
+			ReactDOM.renderToString(<Html assets={webpackIsomorphicTools.assets()} />));
 	}
+
+	if (__DISABLE_SSR__) {
+		hydrateOnClient();
+		return;
+	}
+
+	match({ routes, location: req.url }, (error, redirectLocation, renderProps) => {
+
+		if (redirectLocation) {
+			res.redirect(redirectLocation.pathname + redirectLocation.search);
+		} else if (error) {
+			console.error('ROUTER ERROR:', pretty.render(error));
+			res.status(500)
+			hydrateOnClient()
+		} else {
+
+			const component = (
+				<RouterContext {...renderProps} />
+			)
+
+			res.send('<!doctype html>\n' +
+				ReactDOM.renderToString(<Html assets={webpackIsomorphicTools.assets()} component={component} />));
+		}
+	})
 })
 
 if (config.port) {

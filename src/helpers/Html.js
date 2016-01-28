@@ -15,7 +15,7 @@ class Html extends Component {
 
 	render() {
 		const {assets, component} = this.props
-		const content = ReactDOM.renderToString(component)
+		const content = component ? ReactDOM.renderToString(component) : ''
 
 		return (
 			<html lang="en-us">
