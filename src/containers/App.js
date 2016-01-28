@@ -1,4 +1,5 @@
 import React from 'react'
+import 'style/main.css' // Babel root import plugin in action
 
 class App extends React.Component {
 
