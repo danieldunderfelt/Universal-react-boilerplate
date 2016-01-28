@@ -2,7 +2,7 @@ import es6Promise from 'es6-promise'
 es6Promise.polyfill()
 
 import 'isomorphic-fetch'
-import 'babel/polyfill'
+import 'babel-polyfill'
 
 import Express from 'express'
 import React from 'react'
