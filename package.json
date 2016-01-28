@@ -80,7 +80,6 @@
     "postcss-modules-local-by-default": "^1.0.1",
     "postcss-modules-scope": "^1.0.0",
     "postcss-modules-values": "^1.1.1",
-    "postcss-normalize": "^0.1.2",
     "postcss-scss": "^0.1.3",
     "precss": "^1.4.0",
     "pretty-error": "^2.0.0",
