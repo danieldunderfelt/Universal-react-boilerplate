@@ -1,6 +1,5 @@
 import React from 'react'
 import styles from './home.css'
-import { Link } from 'react-router'
 
 class Home extends React.Component {
 
