@@ -2,7 +2,7 @@ import es6Promise from 'es6-promise'
 es6Promise.polyfill()
 
 import 'isomorphic-fetch'
-import 'babel/polyfill'
+import 'babel-polyfill'
 
 import Express from 'express'
 import React from 'react'
@@ -12,15 +12,10 @@ import compression from 'compression'
 import path from 'path'
 import config from './config'
 import Html from './helpers/Html'
-import Root from './containers/Root'
 import PrettyError from 'pretty-error'
 import http from 'http'
 import routes from './routes'
 import { match, RouterContext } from 'react-router'
-import { Provider } from 'react-redux'
-import thunk from 'redux-thunk'
-import rootReducer from './redux/reducers'
-import configureStore from './redux/configureStore'
 
 const pretty = new PrettyError()
 const app = new Express()
