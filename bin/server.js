@@ -16,7 +16,7 @@ if (__DEVELOPMENT__) {
             hook: true,
             ignore: /(\/\.|~$|\.json|\.scss$)/i
         })) {
-        return
+        return;
     }
 }
 
