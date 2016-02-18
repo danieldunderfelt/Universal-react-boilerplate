@@ -12,35 +12,30 @@ import { RouterContext, createMemoryHistory } from 'react-router'
 import configureStore from './redux/configureStore'
 import Html from './helpers/Html'
 import Root from './containers/Root'
-import { ReactServer, Template, Route, Response, serve, createServer, Middleware, Static, Favicon } from 'react-response'
+import createRouterResponse from 'react-response-router'
+import { ReactServer, Route, Response, Assets, serve, createServer, Middleware, Static, Favicon } from 'react-response'
 
 const server = createServer(
-    <ReactServer host="localhost" port={ parseInt(process.env.port, 10) }>
+    <ReactServer host="localhost" port={ process.env.port }>
         <Route path="/">
             <Middleware use={ compression() }/>
             <Favicon path={ path.join(__dirname, '..', 'static', 'favicon.ico') }/>
-            <Static path={ path.join(__dirname, '..', 'static') }/>
-            <Template component={ Html }>
-                <Response routes={ routes }>
-                    {(renderProps, req, res) => {
-                        if (__DEVELOPMENT__) {
-                            // Do not cache webpack stats: the script file would change since
-                            // hot module replacement is enabled in the development env
-                            webpackIsomorphicTools.refresh()
-                        }
 
-                        const history = createMemoryHistory(req.url)
-                        const store = configureStore({ initialState: {}, history })
-                        const component = (
-                            <Root store={store}>
-                                <RouterContext { ...renderProps }  />
-                            </Root>
-                        )
-                        const data = store.getState()
-                        return { component, data, assets: webpackIsomorphicTools.assets() }
-                    }}
-                </Response>
-            </Template>
+            <Response template={ Html } handler={ createRouterResponse(routes) }>
+                {(renderProps, req, res) => {
+
+                    const history = createMemoryHistory(req.url)
+                    const store = configureStore({ initialState: {}, history })
+
+                    const component = (
+                        <Root store={store}>
+                            <RouterContext { ...renderProps }  />
+                        </Root>
+                    )
+
+                    return { component, store }
+                }}
+            </Response>
         </Route>
     </ReactServer>
 )

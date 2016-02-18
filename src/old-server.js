@@ -60,8 +60,7 @@ app.use((req, res) => {
                     </Root>
 				)
 
-				const data = store.getState()
-				res.status(200).send(createResponse(component, data))
+				res.status(200).send(createResponse(component, store))
 			}
 		})
 	}
