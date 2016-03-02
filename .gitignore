@@ -1,0 +1,8 @@
+static/dist
+webpack-stats.json
+webpack-assets.json
+node_modules/
+.idea/
+.DS_Store
+working files/
+npm-debug.log
