@@ -6,46 +6,23 @@
   "license": "MIT",
   "main": "./bin/server.js",
   "scripts": {
-    "start": "node ./node_modules/better-npm-run start-prod",
-    "build": "webpack --verbose --colors --display-error-details --config webpack/prod.config.js",
-    "postinstall": "webpack --display-error-details --config webpack/prod.config.js",
-    "start-dev": "node ./node_modules/better-npm-run start-dev",
-    "watch-client": "node ./node_modules/better-npm-run watch-client",
-    "dev": "concurrent --kill-others \"npm run watch-client\" \"npm run start-dev\"",
-    "update-deps": "salita"
-  },
-  "betterScripts": {
-    "start-prod": {
-      "command": "node ./bin/server.js",
-      "env": {
-        "NODE_PATH": "./src",
-        "NODE_ENV": "production",
-        "PORT": 3000
-      }
-    },
-    "start-dev": {
-      "command": "node ./bin/server.js",
-      "env": {
-        "NODE_PATH": "./src",
-        "NODE_ENV": "development",
-        "PORT": 3000
-      }
-    },
-    "watch-client": {
-      "command": "node webpack/webpack-dev-server.js",
-      "env": {
-        "UV_THREADPOOL_SIZE": 100,
-        "NODE_PATH": "./src"
-      }
-    }
+    "start": "PORT=3000 NODE_ENV=production nodemon ./bin/server.js",
+    "build": "npm run build-js && npm run build-scss",
+    "build-js": "browserify -t babelify src/client.js -o static/dist/bundle.js",
+    "build-scss": "node-sass src/styles/main.scss static/dist/main.css --output-style=compressed",
+    "start-dev": "PORT=3000 NODE_ENV=development node ./bin/server.js",
+    "watch-js": "watchify -vd -p browserify-hmr -t [ babelify --presets react-hmre ] src/client.js -o static/dist/bundle.js",
+    "watch-scss": "node-sass -w src/styles/main.scss static/dist/main.css --source-map-embed --output-style=expanded",
+    "dev": "npm run clean && concurrently --kill-others \"npm run watch-scss\" \"npm run watch-js\" \"npm run start-dev\"",
+    "clean": "rm -r static/dist/*",
+    "serve-dev": "concurrently --kill-others \"npm run watch-scss\" \"npm run watch-js\" \"npm run start-dev\" \"npm run browser-sync\"",
+    "browser-sync": "browser-sync start --proxy localhost:3000 --files=\"static/dist/*.css\" --no-open --port 8080"
   },
   "dependencies": {
-    "assets-webpack-plugin": "3.3.0",
     "autoprefixer": "6.3.3",
-    "axios": "^0.9.1",
+    "axios": "0.9.1",
     "babel-core": "6.6.0",
     "babel-eslint": "5.0.0",
-    "babel-loader": "6.2.4",
     "babel-plugin-add-module-exports": "0.1.2",
     "babel-plugin-transform-decorators-legacy": "1.3.4",
     "babel-plugin-transform-runtime": "6.6.0",
@@ -53,57 +30,49 @@
     "babel-preset-es2015": "6.6.0",
     "babel-preset-react": "6.5.0",
     "babel-preset-stage-0": "6.5.0",
-    "babel-register": "6.6.0",
+    "babel-register": "^6.6.0",
     "babel-runtime": "6.6.1",
-    "better-npm-run": "0.0.8",
     "classnames": "2.2.3",
-    "clean-webpack-plugin": "0.1.8",
     "color": "0.11.1",
-    "compression": "1.6.1",
-    "css-loader": "0.23.1",
-    "css-modules-require-hook": "3.0.0",
+    "compression": "^1.6.1",
     "decorate-this": "0.5.0",
     "es6-promise": "3.1.2",
-    "express": "4.13.4",
-    "extract-text-webpack-plugin": "1.0.1",
-    "file-loader": "0.8.5",
+    "express": "^4.13.4",
     "history": "2.0.0",
-    "json-loader": "0.5.4",
     "lodash": "4.6.0",
     "lost": "6.7.2",
-    "mobx": "^2.0.0",
-    "mobx-react": "^3.0.0",
-    "node-sass": "^3.4.2",
+    "mobx": "2.0.0",
+    "mobx-react": "3.0.0",
+    "nodemon": "1.9.1",
+    "node-sass": "3.4.2",
     "normalize.css": "3.0.3",
     "object-assign": "4.0.1",
     "pretty-error": "2.0.0",
     "query-string": "3.0.1",
     "react": "0.14.7",
     "react-dom": "0.14.7",
-    "react-helmet": "2.3.1",
+    "react-response": "^0.1.0",
+    "react-response-router": "^0.1.0",
     "react-router": "2.0.0",
-    "sass-loader": "^3.1.2",
     "serialize-javascript": "1.2.0",
     "serve-favicon": "2.3.0",
-    "serve-static": "1.10.2",
-    "strip-loader": "0.1.2",
-    "style-loader": "0.13.0",
-    "url-loader": "0.5.7",
-    "webpack": "1.12.14",
-    "webpack-isomorphic-tools": "2.2.30"
+    "serve-static": "^1.10.2",
+    "url-loader": "0.5.7"
   },
   "devDependencies": {
-    "babel-preset-react-hmre": "1.1.0",
+    "babel-preset-react-hmre": "^1.1.0",
+    "babelify": "7.2.0",
+    "browser-sync": "^2.11.1",
+    "browserify": "13.0.0",
+    "browserify-hmr": "0.3.1",
     "concurrently": "2.0.0",
     "error-stack-parser": "1.3.3",
-    "eslint": "^2.2.0",
-    "eslint-config-airbnb": "^6.0.2",
-    "eslint-loader": "^1.3.0",
-    "eslint-plugin-react": "^4.1.0",
+    "eslint": "2.2.0",
+    "eslint-config-airbnb": "6.0.2",
+    "eslint-plugin-react": "4.1.0",
     "piping": "0.3.0",
     "salita": "0.8.5",
-    "webpack-dev-middleware": "1.5.1",
-    "webpack-hot-middleware": "2.9.0"
+    "watchify": "3.7.0"
   },
   "bin": {
     "daniels-react-boilerplate": "server.js"

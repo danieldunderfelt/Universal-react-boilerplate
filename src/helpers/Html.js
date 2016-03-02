@@ -13,33 +13,26 @@ import serialize from 'serialize-javascript'
  */
 class Html extends Component {
 
-	render() {
-		const {assets, component} = this.props
-		const content = component ? ReactDOM.renderToString(component) : ''
+  render() {
+    const { component } = this.props
 
-		return (
-			<html lang="en-us">
-			<head>
-				<meta charSet="utf-8"/>
-
-				{/* styles (will be present only in production with webpack extract text plugin) */}
-				{Object.keys(assets.styles).map((style, key) =>
-					<link href={assets.styles[style]} key={key} media="screen, projection" rel="stylesheet" type="text/css"/>
-				)}
-			</head>
-			<body>
-			<div id="root" dangerouslySetInnerHTML={{__html: content}}></div>
-			<script src={ assets.javascript.main }></script>
-			</body>
-			</html>
-		)
-	}
+    return (
+      <html lang="en-us">
+      <head>
+        <meta charSet="utf-8" />
+        <link rel="stylesheet" href="/dist/main.css"/>
+      </head>
+      <body>
+      <div id="root" dangerouslySetInnerHTML={{ __html: component }}></div>
+      <script src="/dist/bundle.js"></script>
+      </body>
+      </html>
+    )
+  }
 }
 
 Html.propTypes = {
-	assets: PropTypes.object,
-	component: PropTypes.object,
-	store: PropTypes.object
+  component: PropTypes.string
 }
 
 export default Html
