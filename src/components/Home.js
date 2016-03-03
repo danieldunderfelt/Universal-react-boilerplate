@@ -7,7 +7,7 @@ class Home extends React.Component {
     return (
       <div>
         <h1>
-          Home home
+          Home
         </h1>
       </div>
     )

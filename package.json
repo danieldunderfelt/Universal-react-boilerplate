@@ -6,17 +6,17 @@
   "license": "MIT",
   "main": "./bin/server.js",
   "scripts": {
-    "start": "PORT=3000 NODE_ENV=production nodemon ./bin/server.js",
-    "build": "npm run build-js && npm run build-scss",
-    "build-js": "browserify -t babelify src/client.js -o static/dist/bundle.js",
-    "build-scss": "node-sass src/styles/main.scss static/dist/main.css --output-style=compressed",
-    "start-dev": "PORT=3000 NODE_ENV=development node ./bin/server.js",
-    "watch-js": "watchify -vd -p browserify-hmr -t [ babelify --presets react-hmre ] src/client.js -o static/dist/bundle.js",
-    "watch-scss": "node-sass -w src/styles/main.scss static/dist/main.css --source-map-embed --output-style=expanded",
-    "dev": "npm run clean && concurrently --kill-others \"npm run watch-scss\" \"npm run watch-js\" \"npm run start-dev\"",
+    "start": "PORT=3000 NODE_ENV=production node ./bin/server.js",
+    "start:dev": "PORT=3000 NODE_ENV=development node ./bin/server.js",
+    "build": "npm run build:js && npm run build:scss",
+    "build:js": "browserify -t babelify src/client.js | uglifyjs -m -c --screw-ie8 > static/dist/bundle.js",
+    "build:scss": "node-sass src/styles/main.scss --output-style=compressed | postcss -u autoprefixer > static/dist/main.css",
+    "build:scss:dev": "node-sass src/styles/main.scss --source-map-embed --output-style=expanded | postcss -m -u autoprefixer > static/dist/main.css",
+    "watch:js": "watchify -vd -p browserify-hmr -t [ babelify --presets react-hmre ] src/client.js -o static/dist/bundle.js",
+    "watch:scss": "chokidar src/**/*.scss -c 'npm run build:scss:dev'",
     "clean": "rm -r static/dist/*",
-    "serve-dev": "concurrently --kill-others \"npm run watch-scss\" \"npm run watch-js\" \"npm run start-dev\" \"npm run browser-sync\"",
-    "browser-sync": "browser-sync start --proxy localhost:3000 --files=\"static/dist/*.css\" --no-open --port 8080"
+    "browser-sync": "browser-sync start --proxy localhost:3000 --files='static/dist/*.css' --no-open --port 8080",
+    "dev": "npm run clean && concurrently --kill-others 'npm run watch:scss' 'npm run watch:js' 'npm run start:dev' 'npm run browser-sync'"
   },
   "dependencies": {
     "autoprefixer": "6.3.3",
@@ -43,10 +43,11 @@
     "lost": "6.7.2",
     "mobx": "2.0.0",
     "mobx-react": "3.0.0",
-    "nodemon": "1.9.1",
     "node-sass": "3.4.2",
+    "nodemon": "1.9.1",
     "normalize.css": "3.0.3",
     "object-assign": "4.0.1",
+    "postcss-cli": "^2.5.1",
     "pretty-error": "2.0.0",
     "query-string": "3.0.1",
     "react": "0.14.7",
@@ -57,7 +58,7 @@
     "serialize-javascript": "1.2.0",
     "serve-favicon": "2.3.0",
     "serve-static": "^1.10.2",
-    "url-loader": "0.5.7"
+    "uglify-js": "^2.6.2"
   },
   "devDependencies": {
     "babel-preset-react-hmre": "^1.1.0",
@@ -70,6 +71,7 @@
     "eslint": "2.2.0",
     "eslint-config-airbnb": "6.0.2",
     "eslint-plugin-react": "4.1.0",
+    "node-sass": "^3.4.2",
     "piping": "0.3.0",
     "salita": "0.8.5",
     "watchify": "3.7.0"
