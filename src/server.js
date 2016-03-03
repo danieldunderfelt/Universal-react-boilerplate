@@ -13,8 +13,8 @@ const server = createServer(
   <ReactServer host="localhost" port={ process.env.port }>
     <Route path="/">
       <Middleware use={ compression() } />
-      <Favicon path={ path.join(__dirname, '..', 'static', 'favicon.ico') }/>
-      <Static path={ path.join(__dirname, '..', 'static') }/>
+      <Favicon path={ path.join(__dirname, '..', 'static', 'favicon.ico') } />
+      <Static path={ path.join(__dirname, '..', 'static') } />
 
       <Response template={ Html } handler={ createRouterResponse(routes) }>
         { (renderProps) => <RouterContext { ...renderProps } /> }
@@ -22,4 +22,5 @@ const server = createServer(
     </Route>
   </ReactServer>
 )
+
 serve(server)

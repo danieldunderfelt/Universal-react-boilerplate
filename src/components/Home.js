@@ -1,5 +1,4 @@
 import React from 'react'
-import Yo from './Yo'
 
 class Home extends React.Component {
 
@@ -8,9 +7,8 @@ class Home extends React.Component {
     return (
       <div>
         <h1>
-          Home
+          Home home
         </h1>
-        <Yo />
       </div>
     )
   }
